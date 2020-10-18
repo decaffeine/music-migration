@@ -26,7 +26,9 @@ public class MusicService {
         System.setProperty("webdriver.chrome.driver", WEB_DRIVER_PATH);
         ChromeOptions chromeOptions = new ChromeOptions();
 //        chromeOptions.setCapability("ignoreProtectedModeSettings", true);
-        chromeOptions.setExperimentalOption("debuggerAddress","127.0.0.1:9222");
+        chromeOptions.addArguments("--remote-debugging-port=1559");
+//        webDriver = new ChromeDriver(chromeOptions);
+        chromeOptions.setExperimentalOption("debuggerAddress","127.0.0.1:1559");
         webDriver = new ChromeDriver(chromeOptions);
     }
 
@@ -34,7 +36,7 @@ public class MusicService {
         try {
             String orignalWindow = webDriver.getWindowHandle();
 
-            webDriver.get(TARGET_PAGE_PATH);
+//            webDriver.get(TARGET_PAGE_PATH);
             WebElement element = webDriver.findElement(By.className("login"));
             element.click();
             WebElement paycoElement = webDriver.findElement(By.className("btnPaycoLogin"));
@@ -47,10 +49,7 @@ public class MusicService {
                 }
             }
 
-            WebElement idField = webDriver.findElement(By.id("id"));
-            idField.sendKeys("twilightblue.k@gmail.com");
-            WebElement pwField = webDriver.findElement(By.id("pw"));
-            pwField.sendKeys("...");
+            Thread.sleep(2000);
 
             WebElement loginButton = webDriver.findElement(By.id("loginBtn"));
             loginButton.submit();
@@ -60,7 +59,10 @@ public class MusicService {
             webDriver.switchTo().window(orignalWindow);
 
             webDriver.get("https://music.bugs.co.kr/user/library/like/track?wl_ref=M_left_03_02");
-            System.out.println(webDriver.getPageSource());
+            //System.out.println(webDriver.getPageSource());
+            WebElement trackList = webDriver.findElement(By.className("list tracklist "));
+            System.out.println(trackList.toString());
+
 
         } catch (Exception e) {
             e.printStackTrace();
