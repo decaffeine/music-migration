@@ -7,6 +7,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MusicService {
 
@@ -60,9 +62,12 @@ public class MusicService {
 
             webDriver.get("https://music.bugs.co.kr/user/library/like/track?wl_ref=M_left_03_02");
             //System.out.println(webDriver.getPageSource());
-            WebElement trackList = webDriver.findElement(By.className("list tracklist "));
-            System.out.println(trackList.toString());
+            WebElement trackList = webDriver.findElement(By.id("USER_LIKE_TRACK1234"));
+            List<WebElement> titles = trackList.findElements(By.className("title"));
 
+            for (int i = 1 ; i < titles.size() ; i++) {
+                System.out.println(titles.get(i).getText());
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
