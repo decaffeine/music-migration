@@ -7,6 +7,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Service;
 
+import java.net.URLEncoder;
 import java.util.List;
 
 @Service
@@ -64,9 +65,13 @@ public class MusicService {
             //System.out.println(webDriver.getPageSource());
             WebElement trackList = webDriver.findElement(By.id("USER_LIKE_TRACK1234"));
             List<WebElement> titles = trackList.findElements(By.className("title"));
+            List<WebElement> artists = trackList.findElements(By.className("artist"));
 
             for (int i = 1 ; i < titles.size() ; i++) {
-                System.out.println(titles.get(i).getText());
+                System.out.println((titles.get(i).getText() + " " + artists.get(i).getText()));
+                // TODO : 아티스트 이름 뒤에 괄호 거르는 정규식 만들기
+                //webDriver.get("https://music.apple.com/us/search?term=" + (titles.get(i).getText() + " " + artists.get(i).getText()));
+                Thread.sleep(5000);
             }
 
         } catch (Exception e) {
