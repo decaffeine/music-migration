@@ -8,6 +8,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -64,14 +65,20 @@ public class MusicService {
             webDriver.get("https://music.bugs.co.kr/user/library/like/track?wl_ref=M_left_03_02");
             //System.out.println(webDriver.getPageSource());
             WebElement trackList = webDriver.findElement(By.id("USER_LIKE_TRACK1234"));
-            List<WebElement> titles = trackList.findElements(By.className("title"));
-            List<WebElement> artists = trackList.findElements(By.className("artist"));
+            List<WebElement> titleElements = trackList.findElements(By.className("title"));
+            List<WebElement> artistElements = trackList.findElements(By.className("artist"));
 
-            for (int i = 1 ; i < titles.size() ; i++) {
-                System.out.println((titles.get(i).getText() + " " + artists.get(i).getText()));
-                // TODO : 아티스트 이름 뒤에 괄호 거르는 정규식 만들기
-                //webDriver.get("https://music.apple.com/us/search?term=" + (titles.get(i).getText() + " " + artists.get(i).getText()));
-                Thread.sleep(5000);
+            List<String> titles = new ArrayList<>();
+            List<String> artists = new ArrayList<>();
+            for (int i = 1 ; i < titleElements.size() ; i++) {
+                titles.add(titleElements.get(i).getText());
+                artists.add(artistElements.get(i).getText().replaceAll("\\([^()]*\\)",""));
+            }
+
+            for (int i = 0 ; i < titles.size() ; i++) {
+                System.out.println(i + " ## " + titles.get(i) + " " + artists.get(i));
+                webDriver.get("https://music.apple.com/us/search?term=" +  titles.get(i) + " " + artists.get(i));
+                Thread.sleep(10000); // APPLE MUSIC 반응속도가 생각보다 엄청 느림
             }
 
         } catch (Exception e) {
