@@ -14,8 +14,6 @@ import java.util.List;
 public class MusicService {
 
     private static final String WEB_DRIVER_PATH = "/Users/hyejin/projects/music-migration/src/main/resources/chromedriver";
-    private static final String TARGET_PAGE_PATH = "https://music.bugs.co.kr";
-
     private WebDriver webDriver;
     private List<String> titles = new ArrayList<>();
     private List<String> artists = new ArrayList<>();
@@ -28,9 +26,7 @@ public class MusicService {
     public MusicService() {
         System.setProperty("webdriver.chrome.driver", WEB_DRIVER_PATH);
         ChromeOptions chromeOptions = new ChromeOptions();
-//        chromeOptions.setCapability("ignoreProtectedModeSettings", true);
         chromeOptions.addArguments("--remote-debugging-port=1559");
-//        webDriver = new ChromeDriver(chromeOptions);
         chromeOptions.setExperimentalOption("debuggerAddress","127.0.0.1:1559");
         webDriver = new ChromeDriver(chromeOptions);
     }
@@ -60,16 +56,13 @@ public class MusicService {
 
             webDriver.switchTo().window(orignalWindow);
 
-            searchBugsAndAdd(getPageUrl(1));
-
-            System.out.println("done");
-            System.out.println(titles.size());
+            for(int i = 1 ; i <= 8 ; i++) {
+                searchBugsAndAdd(getPageUrl(i));
+            }
 
             for (int i = 0 ; i < titles.size() ; i++) {
-                String query = titles.get(i) + " " + artists.get(i);
-                System.out.println(i + " ## " + query);
-
-                searchApplemusic(query);
+                String query = artists.get(i) + " - " + titles.get(i);
+                System.out.println(query);
             }
 
         } catch (Exception e) {
@@ -88,7 +81,6 @@ public class MusicService {
         for (int i = 1 ; i < titleElements.size() ; i++) {
             titles.add(titleElements.get(i).getText());
             artists.add(artistElements.get(i).getText().replaceAll("\\([^()]*\\)",""));
-            System.out.println(titleElements.get(i));
         }
 
     }
@@ -103,8 +95,6 @@ public class MusicService {
     private void searchApplemusic(String query) throws InterruptedException {
         webDriver.get("https://music.apple.com/us/search?term=" +  query);
         Thread.sleep(20000); // APPLE MUSIC 반응속도가 생각보다 엄청 느림
-
     }
-
 
 }
